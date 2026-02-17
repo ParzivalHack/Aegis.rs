@@ -1,6 +1,6 @@
 use std::sync::Arc;
 use parking_lot::RwLock;
-use std::time::{Instant};
+use std::time::{Duration, Instant};
 use std::collections::VecDeque;
 
 pub struct Metrics {
@@ -8,6 +8,7 @@ pub struct Metrics {
     latency_samples: Arc<RwLock<VecDeque<(Instant, u64)>>>,
     total_requests: Arc<RwLock<u64>>,
     blocked_requests: Arc<RwLock<u64>>,
+    flagged_requests: Arc<RwLock<u64>>,
 }
 
 impl Metrics {
@@ -17,10 +18,11 @@ impl Metrics {
             latency_samples: Arc::new(RwLock::new(VecDeque::new())),
             total_requests: Arc::new(RwLock::new(0)),
             blocked_requests: Arc::new(RwLock::new(0)),
+            flagged_requests: Arc::new(RwLock::new(0)),
         }
     }
 
-    pub fn record_request(&self, latency_ms: u64, blocked: bool) {
+    pub fn record_request(&self, latency_ms: u64, blocked: bool, flagged: bool) {
         let mut total = self.total_requests.write();
         *total += 1;
 
@@ -29,13 +31,25 @@ impl Metrics {
             *blocked += 1;
         }
 
+        if flagged {
+            let mut flagged_count = self.flagged_requests.write();
+            *flagged_count += 1;
+        }
+
         let mut samples = self.latency_samples.write();
-        samples.push_back((Instant::now(), latency_ms));
+        let now = Instant::now();
+        samples.push_back((now, latency_ms));
 
         // Keep only last 120 samples
         while samples.len() > 120 {
             samples.pop_front();
         }
+
+        let recent_count = samples
+            .iter()
+            .filter(|(ts, _)| now.duration_since(*ts) <= Duration::from_secs(1))
+            .count() as f64;
+        *self.requests_per_second.write() = recent_count;
     }
 
     pub fn get_avg_latency(&self) -> f64 {
@@ -54,5 +68,13 @@ impl Metrics {
 
     pub fn get_blocked_requests(&self) -> u64 {
         *self.blocked_requests.read()
+    }
+
+    pub fn get_requests_per_second(&self) -> f64 {
+        *self.requests_per_second.read()
+    }
+
+    pub fn get_flagged_requests(&self) -> u64 {
+        *self.flagged_requests.read()
     }
 }

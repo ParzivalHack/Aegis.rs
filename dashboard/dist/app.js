@@ -198,7 +198,7 @@ const LoginPanel = ({ onLogin }) => {
     );
 };
 
-const CommandCenter = ({ stats, logs }) => {
+const CommandCenter = ({ stats, logs, nodeLabel }) => {
     const { ShieldAlert, Server, Cpu, Activity } = lucide;
     const { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = Recharts;
 
@@ -206,6 +206,53 @@ const CommandCenter = ({ stats, logs }) => {
         time: new Date(l.timestamp).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         v: l.verdict === 'Malicious' ? 10 : 2
     })), [logs]);
+    const total = Number(stats.total_requests || 0);
+    const blocked = Number(stats.blocked_requests || 0);
+    const forwarded = Number(stats.forwarded_requests || 0);
+    const flagged = Number(stats.flagged_requests || 0);
+    const avgLatencyMs = Number(stats.avg_latency_ms || 0);
+    const requestsPerSecond = Number(stats.requests_per_second || 0);
+    const blockRate = total > 0 ? (blocked / total) * 100 : 0;
+    const allowRate = total > 0 ? (forwarded / total) * 100 : 0;
+
+    const cards = [
+        {
+            name: 'Request Volume',
+            value: total,
+            trend: `${requestsPerSecond.toFixed(1)} req/s`,
+            trendClass: 'text-aegis-primary',
+            icon: Activity,
+            color: 'text-aegis-primary',
+            bg: 'bg-aegis-primary/10'
+        },
+        {
+            name: 'Neutralized',
+            value: blocked,
+            trend: `${blockRate.toFixed(1)}% block rate`,
+            trendClass: blockRate > 20 ? 'text-aegis-accent' : 'text-slate-500',
+            icon: ShieldAlert,
+            color: 'text-aegis-accent',
+            bg: 'bg-aegis-accent/10'
+        },
+        {
+            name: 'Forwarded',
+            value: forwarded,
+            trend: `${allowRate.toFixed(1)}% allow rate`,
+            trendClass: 'text-aegis-success',
+            icon: Server,
+            color: 'text-aegis-success',
+            bg: 'bg-aegis-success/10'
+        },
+        {
+            name: 'System Latency',
+            value: `${avgLatencyMs.toFixed(1)}ms`,
+            trend: `${flagged} flagged`,
+            trendClass: flagged > 0 ? 'text-aegis-warning' : 'text-slate-500',
+            icon: Cpu,
+            color: 'text-aegis-secondary',
+            bg: 'bg-aegis-secondary/10'
+        },
+    ];
 
     return (
         <div className="p-10 space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700 h-full overflow-y-auto pb-20 custom-scrollbar">
@@ -219,27 +266,22 @@ const CommandCenter = ({ stats, logs }) => {
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="glass px-4 py-3 rounded-2xl border border-slate-800 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                        Node: <span className="text-aegis-primary ml-1">US-EAST-01</span>
+                        Node: <span className="text-aegis-primary ml-1">{nodeLabel || 'UNKNOWN-EDGE-01'}</span>
                     </div>
                 </div>
             </header>
 
             {/* Advanced Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[
-                    { name: 'Request Volume', value: stats.total_requests || 0, trend: '+12%', icon: Activity, color: 'text-aegis-primary', bg: 'bg-aegis-primary/10' },
-                    { name: 'Neutralized', value: stats.blocked_requests || 0, trend: '+4%', icon: ShieldAlert, color: 'text-aegis-accent', bg: 'bg-aegis-accent/10' },
-                    { name: 'Forwarded', value: stats.forwarded_requests || 0, trend: '-2%', icon: Server, color: 'text-aegis-success', bg: 'bg-aegis-success/10' },
-                    { name: 'System Latency', value: '42ms', trend: 'Stable', icon: Cpu, color: 'text-aegis-secondary', bg: 'bg-aegis-secondary/10' },
-                ].map(s => (
+                {cards.map(s => (
                     <div key={s.name} className="glass group cursor-pointer relative overflow-hidden p-8 rounded-[2rem] border border-slate-800 hover:border-aegis-primary/30 transition-all">
                         <div className="flex justify-between items-start mb-6">
                             <div className={`p-4 rounded-2xl ${s.bg} border border-white/5 group-hover:scale-110 transition-transform`}>
                                 <s.icon className={s.color} size={28} />
                             </div>
-                            <span className={`text-[10px] font-black uppercase tracking-widest ${s.trend.startsWith('+') ? 'text-aegis-success' : 'text-slate-500'}`}>{s.trend}</span>
+                            <span className={`text-[10px] font-black uppercase tracking-widest ${s.trendClass}`}>{s.trend}</span>
                         </div>
-                        <h3 className="text-4xl font-black text-white mb-2">{s.value.toLocaleString()}</h3>
+                        <h3 className="text-4xl font-black text-white mb-2">{typeof s.value === 'number' ? s.value.toLocaleString() : s.value}</h3>
                         <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">{s.name}</p>
                     </div>
                 ))}
@@ -700,10 +742,16 @@ const Configuration = ({ config, semanticActive, onSave }) => {
     };
 
     const toggleTunnel = async () => {
-        if (tunnelStatus.active) await API.fetch('/tunnel/stop', { method: 'POST' });
-        else await API.fetch('/tunnel/start', { method: 'POST' });
-        const status = await API.fetch('/tunnel');
-        setTunnelStatus(status);
+        const action = tunnelStatus.active
+            ? await API.fetch('/tunnel/stop', { method: 'POST' })
+            : await API.fetch('/tunnel/start', { method: 'POST' });
+
+        if (action && typeof action.active === 'boolean') {
+            setTunnelStatus({ active: !!action.active, url: action.url || null });
+        } else {
+            const status = await API.fetch('/tunnel');
+            setTunnelStatus(status);
+        }
     };
 
     return (
@@ -834,7 +882,7 @@ const Configuration = ({ config, semanticActive, onSave }) => {
                         <StatusChip type={tunnelStatus.active ? 'safe' : 'info'}>{tunnelStatus.active ? 'Live' : 'Offline'}</StatusChip>
                     </div>
                     <div className="space-y-8 relative z-10 flex-1 flex flex-col">
-                        <p className="text-sm text-slate-500 font-medium">Expose your local proxy dashboard via a random-generated secure HTTPS tunnel. No account required.</p>
+                        <p className="text-sm text-slate-500 font-medium">Expose your local proxy dashboard through a Serveo HTTPS tunnel over SSH. Optionally set a custom subdomain in tunnel config.</p>
 
                         <div className="flex-1 p-8 bg-slate-900/50 rounded-[2rem] border-2 border-dashed border-slate-800 flex flex-col items-center justify-center space-y-6 group-hover:border-aegis-primary/30 transition-all">
                             {tunnelStatus.active ? (
@@ -964,7 +1012,7 @@ const App = () => {
             <Sidebar activePage={page} setActivePage={setPage} onLogout={handleLogout} />
             <main className="flex-1 relative overflow-hidden flex flex-col">
                 <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-aegis-primary/5 to-transparent pointer-events-none"></div>
-                {page === 'command' && <CommandCenter stats={stats} logs={logs} />}
+                {page === 'command' && <CommandCenter stats={stats} logs={logs} nodeLabel={stats.node_label} />}
                 {page === 'analytics' && <Analytics logs={logs} stats={stats} />}
                 {page === 'logs' && <AttackLogs logs={logs} onExport={handleExport} />}
                 {page === 'rules' && <RulesManager rules={rules} onSaveRule={handleSaveRule} onDeleteRule={handleDeleteRule} />}

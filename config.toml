@@ -45,7 +45,7 @@ timeout_ms = 10000
 [cloudflare_tunnel]
 enabled = false
 token = ""
-cloudflared_path = "cloudflared"
+cloudflared_path = "ssh"
 local_url = "http://127.0.0.1:3000"
 
 [logging]

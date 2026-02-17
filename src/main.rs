@@ -57,7 +57,7 @@ async fn main() -> std::io::Result<()> {
     log::info!("Detection pipeline initialized");
 
     // Initialize metrics
-    let _metrics = Arc::new(metrics::Metrics::new());
+    let metrics = Arc::new(metrics::Metrics::new());
 
     // Initialize Cloudflare Tunnel if configured
     let tunnel_manager = {
@@ -79,11 +79,18 @@ async fn main() -> std::io::Result<()> {
             .expect("Failed to create HTTP client")
     };
 
+    // Create dedicated HTTP client for lightweight geo lookups used by dashboard.
+    let geo_client = reqwest::Client::builder()
+        .timeout(Duration::from_millis(2500))
+        .build()
+        .expect("Failed to create geo lookup client");
+
     // Proxy state
     let proxy_state = web::Data::new(proxy::ProxyState {
         config: config.clone(),
         detection_pipeline: detection_pipeline.clone(),
         logger: logger.clone(),
+        metrics: metrics.clone(),
         client,
     });
 
@@ -94,6 +101,9 @@ async fn main() -> std::io::Result<()> {
         heuristic_engine,
         detection_pipeline: detection_pipeline.clone(),
         tunnel_manager: tunnel_manager.clone(),
+        geo_client,
+        node_cache: Arc::new(tokio::sync::RwLock::new(std::collections::HashMap::new())),
+        metrics: metrics.clone(),
     });
 
     let (proxy_host, proxy_port, dashboard_host, dashboard_port, session_key) = {

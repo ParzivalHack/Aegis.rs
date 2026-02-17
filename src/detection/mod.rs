@@ -5,7 +5,7 @@ pub mod decoder;
 
 use crate::config::{Config, DetectionConfig};
 use crate::errors::AegisError;
-use models::{DetectionResult, Verdict};
+use models::{AttackType, DetectionLayer, DetectionResult, Severity, Verdict};
 use std::sync::Arc;
 
 pub struct DetectionPipeline {
@@ -34,6 +34,7 @@ impl DetectionPipeline {
     pub async fn analyze(&self, payload: &str) -> Result<DetectionResult, AegisError> {
         // Run heuristic engine first on raw payload
         let heuristic_result = self.heuristic_engine.analyze(payload)?;
+        let heuristic_result = self.inspect_decoded_variants(payload, heuristic_result)?;
 
         // Extract clean prompt for AI analysis
         let clean_prompt = self.extract_prompt(payload);
@@ -172,6 +173,42 @@ impl DetectionPipeline {
         } else {
             Ok(result)
         }
+    }
+
+    fn inspect_decoded_variants(
+        &self,
+        payload: &str,
+        base_result: DetectionResult,
+    ) -> Result<DetectionResult, AegisError> {
+        if matches!(base_result.verdict, Verdict::Malicious) {
+            return Ok(base_result);
+        }
+
+        let decoded_variants = decoder::Decoder::detect_and_decode(payload, 2);
+        if decoded_variants.is_empty() {
+            return Ok(base_result);
+        }
+
+        for (method, decoded_text) in decoded_variants {
+            let decoded_result = self.heuristic_engine.analyze(&decoded_text)?;
+            if matches!(decoded_result.verdict, Verdict::Malicious) {
+                let mut matched_rules = decoded_result.matched_rules.clone();
+                matched_rules.push(format!("decoded_via_{}", method));
+                return Ok(DetectionResult::malicious(
+                    AttackType::EncodingObfuscation,
+                    decoded_result.confidence.max(0.92),
+                    format!(
+                        "Detected malicious content after {} decode: {}",
+                        method, decoded_result.reasoning
+                    ),
+                    DetectionLayer::Heuristic,
+                    matched_rules,
+                    Severity::High,
+                ));
+            }
+        }
+
+        Ok(base_result)
     }
 
     pub fn reload_rules(&mut self) -> Result<(), AegisError> {

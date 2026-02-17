@@ -31,6 +31,8 @@ pub struct Logger {
     log_path: String,
     max_size: u64,
     current_size: Arc<Mutex<u64>>,
+    index: index::Index,
+    compactor: compaction::Compactor,
 }
 
 impl Logger {
@@ -50,6 +52,8 @@ impl Logger {
             log_path: log_path.to_string(),
             max_size,
             current_size: Arc::new(Mutex::new(current_size)),
+            index: index::Index::new(),
+            compactor: compaction::Compactor::new(),
         })
     }
 
@@ -65,6 +69,7 @@ impl Logger {
             .map_err(|e| AegisError::LoggingError(format!("Failed to write log entry: {}", e)))?;
         file.flush()
             .map_err(|e| AegisError::LoggingError(format!("Failed to flush log: {}", e)))?;
+        self.index.record_append(line_size);
 
         let mut current_size = self.current_size.lock().unwrap();
         *current_size += line_size;
@@ -100,6 +105,8 @@ impl Logger {
 
         let mut current_size = self.current_size.lock().unwrap();
         *current_size = 0;
+        self.index.reset();
+        self.compactor.record_rotation();
 
         log::info!("Log file rotated");
         Ok(())

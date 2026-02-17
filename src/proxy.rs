@@ -2,7 +2,9 @@ use actix_web::{web, HttpRequest, HttpResponse, Error};
 use crate::config::Config;
 use crate::detection::DetectionPipeline;
 use crate::detection::models::Verdict;
+use crate::errors::AegisError;
 use crate::logging::{Logger, LogEntry};
+use crate::metrics::Metrics;
 use chrono::Utc;
 use std::sync::Arc;
 use uuid::Uuid;
@@ -14,6 +16,7 @@ pub struct ProxyState {
     pub config: Arc<ParkingLotRwLock<Config>>,
     pub detection_pipeline: Arc<tokio::sync::Mutex<DetectionPipeline>>,
     pub logger: Arc<Logger>,
+    pub metrics: Arc<Metrics>,
     pub client: reqwest::Client,
 }
 
@@ -51,7 +54,8 @@ pub async fn proxy_handler(
         match pipeline.analyze(&payload).await {
             Ok(result) => result,
             Err(e) => {
-                log::error!("Detection pipeline error: {}", e);
+                let detection_error = AegisError::DetectionError(e.to_string());
+                log::error!("Detection pipeline error: {}", detection_error);
                 return Ok(HttpResponse::InternalServerError()
                     .json(serde_json::json!({
                         "error": {
@@ -64,6 +68,13 @@ pub async fn proxy_handler(
     };
 
     let latency_ms = start_time.elapsed().as_millis() as u64;
+    state
+        .metrics
+        .record_request(
+            latency_ms,
+            matches!(detection_result.verdict, Verdict::Malicious),
+            matches!(detection_result.verdict, Verdict::Ambiguous),
+        );
 
     // Log the event
     let log_entry = LogEntry {
@@ -181,7 +192,8 @@ async fn forward_request(
             Ok(http_response.body(body))
         }
         Err(e) => {
-            log::error!("Failed to forward request: {}", e);
+            let proxy_error = AegisError::ProxyError(format!("Failed to reach target endpoint: {}", e));
+            log::error!("{}", proxy_error);
             Ok(HttpResponse::BadGateway()
                 .json(serde_json::json!({
                     "error": {
@@ -195,7 +207,10 @@ async fn forward_request(
 
 fn resolve_target_url(base_url: &str, req: &HttpRequest) -> Result<String, Error> {
     let mut target_url = reqwest::Url::parse(base_url)
-        .map_err(|e| actix_web::error::ErrorInternalServerError(format!("Invalid target_url: {}", e)))?;
+        .map_err(|e| {
+            let proxy_error = AegisError::ProxyError(format!("Invalid target_url '{}': {}", base_url, e));
+            actix_web::error::ErrorInternalServerError(proxy_error)
+        })?;
 
     let incoming_path = req.uri().path();
 

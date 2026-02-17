@@ -100,7 +100,7 @@ impl HeuristicEngine {
 
     fn load_rules(path: &str) -> Result<Vec<CompiledRule>, AegisError> {
         let content = fs::read_to_string(path)
-            .map_err(|e| AegisError::ConfigError(format!("Failed to read rules file: {}", e)))?;
+            .map_err(|e| AegisError::RuleLoadError(format!("Failed to read rules file: {}", e)))?;
         
         #[derive(Deserialize)]
         struct RulesFile {
@@ -108,7 +108,7 @@ impl HeuristicEngine {
         }
         
         let rules_file: RulesFile = toml::from_str(&content)
-            .map_err(|e| AegisError::ConfigError(format!("Failed to parse rules file: {}", e)))?;
+            .map_err(|e| AegisError::RuleLoadError(format!("Failed to parse rules file: {}", e)))?;
         
         let mut compiled_rules = Vec::new();
         for rule in rules_file.rules {
@@ -120,7 +120,7 @@ impl HeuristicEngine {
                 };
                 
                 Some(Regex::new(&pattern)
-                    .map_err(|e| AegisError::ConfigError(format!("Invalid regex in rule '{}': {}", rule.name, e)))?)
+                    .map_err(|e| AegisError::RuleLoadError(format!("Invalid regex in rule '{}': {}", rule.name, e)))?)
             } else {
                 None
             };
