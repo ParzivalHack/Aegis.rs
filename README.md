@@ -398,6 +398,6 @@ Fork the repo, create a branch, and open a PR. For new rules, include a descript
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License: see [LICENSE](LICENSE) for details.
 
 **Built with Rust 🦀 · Powered by Actix-web · Secured by Aegis.rs**
