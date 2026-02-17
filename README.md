@@ -1,6 +1,7 @@
 # Aegis.rs 🛡️
+<img width="1834" height="1007" alt="image" src="https://github.com/user-attachments/assets/8fc2206e-4dd8-4990-a7e2-1e2f772408d2" />
 
-## The first locally-hosted, open-source LLM security proxy, written completely in Rust
+### The first locally-hosted, open-source LLM security proxy, written completely in Rust
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/Rust-1.70%2B-orange?logo=rust&logoColor=white)](https://www.rust-lang.org/)
