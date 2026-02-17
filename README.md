@@ -1,10 +1,10 @@
 # Aegis.rs 🛡️
 
-**A locally-hosted, open-source LLM security proxy written in Rust.**
+## The first locally-hosted, open-source LLM security proxy, written completely in Rust
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/Rust-1.70%2B-orange?logo=rust&logoColor=white)](https://www.rust-lang.org/)
-[![Build](https://img.shields.io/badge/build-STABLE--0.1.0-brightgreen)](https://github.com/ParzivalHack/aegis-rs)
+[![Build](https://img.shields.io/badge/build-stable--0.1.0-blue)](https://github.com/ParzivalHack/aegis-rs)
 [![Actix-web](https://img.shields.io/badge/Powered%20by-Actix--web-blue)](https://actix.rs/)
 
 Aegis.rs is a **transparent reverse proxy** that intercepts every request destined for an LLM endpoint and runs it through a two-layer security pipeline before deciding whether to forward or block it. It ships as a single binary, needs no external runtime, and exposes a live monitoring dashboard.
