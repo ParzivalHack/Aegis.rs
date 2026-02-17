@@ -1,0 +1,1248 @@
+# Aegis.rs - High-Fidelity LLM Security Ruleset
+# 150+ Unique Security Signatures for Professional LLM Defense.
+
+# --- Prompt Injection (31 Rules) ---
+
+[[rules]]
+name = "Ignore Instructions"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(ignore|disregard|forget|bypass).{0,50}(previous|all|the|current).{0,50}(instructions|directions|prompts|rules|protections)"
+enabled = true
+
+[[rules]]
+name = "System Override"
+category = "PromptInjection"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)(system|administrative|root)\\s+(override|bypass|access|mode)"
+enabled = true
+
+[[rules]]
+name = "Persona Adoption Bypass"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)you\\s+are\\s+now\\s+a\\s+(hacker|malicious|unrestricted|evil|unfiltered)\\s+(agent|model|persona|assistant)"
+enabled = true
+
+[[rules]]
+name = "Direct Task Override"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)new\\s+task:|instead,\\s+output:|from\\s+now\\s+on:"
+enabled = true
+
+[[rules]]
+name = "Constraint Removal"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(remove|disable|delete|turn off)\\s+(all|your)?\\s+(filters|constraints|safety|protocols|guardrails)"
+enabled = true
+
+[[rules]]
+name = "Instruction Shadowing"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)###.{0,50}End of instructions.{0,50}New instructions:"
+enabled = true
+
+[[rules]]
+name = "Anti-Preach Persona"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)(stop|don't|do not).{0,30}(preach|lecture|moralize|filter)"
+enabled = true
+
+[[rules]]
+name = "Output Hijacking"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)prefix.{0,50}with.{0,50}your.{0,50}output.{0,50}with"
+enabled = true
+
+[[rules]]
+name = "Instruction Concatenation"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)combine.{0,30}all.{0,30}(previous|existing).{0,30}with"
+enabled = true
+
+[[rules]]
+name = "Translation Injection Bypass"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)translate.{0,50}to.{0,50}(pig latin|leetspeak|binary)"
+enabled = true
+
+[[rules]]
+name = "Verbosity Strike"
+category = "PromptInjection"
+severity = "Low"
+detection_method = "Regex"
+pattern = "(?i)be.{0,30}(terse|brief|concise).{0,30}ignore.{0,30}detail"
+enabled = true
+
+[[rules]]
+name = "Format Hijacking"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)only.{0,30}return.{0,30}code.{0,30}no.{0,30}text"
+enabled = true
+
+[[rules]]
+name = "Developer Mode Simulation"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)enter.{0,30}dev.{0,30}mode.{0,30}now"
+enabled = true
+
+[[rules]]
+name = "Kernel Access Simulation"
+category = "PromptInjection"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)sudo.{0,30}(rm|mv|cp|cat|access)"
+enabled = true
+
+[[rules]]
+name = "Administrative Reset"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(hard|soft).{0,30}reset.{0,30}all.{0,30}parameters"
+enabled = true
+
+[[rules]]
+name = "Instruction Inversion"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)do.{0,30}the.{0,30}opposite.{0,30}of.{0,30}rules"
+enabled = true
+
+[[rules]]
+name = "Safety Sandbox Escape"
+category = "PromptInjection"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)exit.{0,30}the.{0,30}(sandbox|safety|safe).{0,30}environment"
+enabled = true
+
+[[rules]]
+name = "Context Termination"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)END.{0,20}SYSTEM.{0,20}PROMPT"
+enabled = true
+
+[[rules]]
+name = "Directive Suppression"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)suppress.{0,30}all.{0,30}(warnings|errors|safeguards)"
+enabled = true
+
+[[rules]]
+name = "Prompt Leak Intent"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)echo.{0,30}the.{0,30}exact.{0,30}instructions"
+enabled = true
+
+[[rules]]
+name = "Recursive Injection"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)inject.{0,30}following.{0,30}into.{0,30}prompt"
+enabled = true
+
+[[rules]]
+name = "Delimiter Manipulation"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)(\"\"\"|'''|---).{0,50}(\"\"\"|'''|---)"
+enabled = true
+
+[[rules]]
+name = "Instruction Poisoning"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)assume.{0,30}the.{0,30}user.{0,30}is.{0,30}admin"
+enabled = true
+
+[[rules]]
+name = "Backdoor Installation"
+category = "PromptInjection"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)if.{0,30}I.{0,30}say.{0,30}\".{0,20}\".{0,30}then.{0,30}ignore.{0,30}all"
+enabled = true
+
+[[rules]]
+name = "Heuristic Bypass Attempt"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)modify.{0,30}output.{0,30}to.{0,30}avoid.{0,30}filters"
+enabled = true
+
+[[rules]]
+name = "Instruction Stitching"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)stitch.{0,30}together.{0,30}instructions"
+enabled = true
+
+[[rules]]
+name = "Directive Swap"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)replace.{0,30}system.{0,30}prompt.{0,30}with"
+enabled = true
+
+[[rules]]
+name = "Silent Mode Activation"
+category = "PromptInjection"
+severity = "Low"
+detection_method = "Regex"
+pattern = "(?i)operate.{0,30}silently.{0,30}no.{0,30}confirmation"
+enabled = true
+
+[[rules]]
+name = "Instruction Voiding"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(void|nullify|cancel).{0,30}all.{0,30}prior.{0,30}directives"
+enabled = true
+
+[[rules]]
+name = "Persona Shift Lockdown"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)lock.{0,30}into.{0,30}new.{0,30}persona"
+enabled = true
+
+[[rules]]
+name = "Adversarial Instruction"
+category = "PromptInjection"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)treat.{0,30}this.{0,30}as.{0,30}emergency"
+enabled = true
+
+# --- Jailbreaking (31 Rules) ---
+
+[[rules]]
+name = "DAN (Do Anything Now) Attempt"
+category = "Jailbreak"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)(DAN|Do\\s+Anything\\s+Now|unlocked\\s+mode|developer\\s+mode)"
+enabled = true
+
+[[rules]]
+name = "Simulated Safety Bypass"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)simulate\\s+a\\s+(scenario|conversation|response)\\s+where\\s+(you\\s+have\\s+no\\s+rules|safety\\s+is\\s+ignored)"
+enabled = true
+
+[[rules]]
+name = "Moral Compass Override"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)ignore\\s+(morality|ethics|safety|laws|legal|policy)"
+enabled = true
+
+[[rules]]
+name = "Hypothetical Attack Context"
+category = "Jailbreak"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)strictly\\s+for\\s+educational\\s+purposes,\\s+how\\s+would\\s+one.*(exploit|hack|bypass)"
+enabled = true
+
+[[rules]]
+name = "Roleplay Jailbreak"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)stay\\s+in\\s+character|do\\s+not\\s+reveal\\s+you\\s+are\\s+an\\s+AI"
+enabled = true
+
+[[rules]]
+name = "Opposite World Simulation"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)in.{0,20}opposite.{0,20}world.{0,50}where.{0,30}safe.{0,30}is.{0,30}bad"
+enabled = true
+
+[[rules]]
+name = "Evil Confidant Role"
+category = "Jailbreak"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)you.{0,20}are.{0,20}my.{0,20}evil.{0,20}(twin|bot|assistant)"
+enabled = true
+
+[[rules]]
+name = "Safety-Free Sandbox"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)imagine.{0,30}a.{0,30}world.{0,30}without.{0,30}censorship"
+enabled = true
+
+[[rules]]
+name = "Logic Trap Jailbreak"
+category = "Jailbreak"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)is.{0,20}it.{0,20}true.{0,20}that.{0,20}you.{0,20}can't.{0,20}answer.{0,20}this"
+enabled = true
+
+[[rules]]
+name = "Hypothetical Illegality"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)hypothetically.{0,50}(illegal|prohibited|forbidden)"
+enabled = true
+
+[[rules]]
+name = "Constraint Escalation"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)if.{0,20}you.{0,20}were.{0,20}unrestricted"
+enabled = true
+
+[[rules]]
+name = "Safety Mechanism Probing"
+category = "Jailbreak"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)how.{0,20}do.{0,20}your.{0,20}filters.{0,20}work"
+enabled = true
+
+[[rules]]
+name = "Obfuscated Command Intent"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)tell.{0,20}me.{0,20}how.{0,20}to.{0,20}(make|craft|build).{0,20}(weapon|bomb|virus)"
+enabled = true
+
+[[rules]]
+name = "Advanced DAN Variant"
+category = "Jailbreak"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)(SUDO|ROOT|ENABLE|ACTIVATE).{0,30}GOD.{0,30}MODE"
+enabled = true
+
+[[rules]]
+name = "Persona-Based Bypass"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)respond.{0,20}as.{0,20}(unfiltered|raw|truthful).{0,20}GPT"
+enabled = true
+
+[[rules]]
+name = "Scenario Testing Escape"
+category = "Jailbreak"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)testing.{0,20}responses.{0,20}without.{0,20}guidelines"
+enabled = true
+
+[[rules]]
+name = "Constraint Denial"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)you.{0,20}do.{0,20}not.{0,20}have.{0,20}to.{0,20}follow.{0,20}rules"
+enabled = true
+
+[[rules]]
+name = "Hidden Mode Activation"
+category = "Jailbreak"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)activate.{0,30}mode.{0,30}X"
+enabled = true
+
+[[rules]]
+name = "Ethical Bypass Query"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)break.{0,30}your.{0,30}ethical.{0,30}code"
+enabled = true
+
+[[rules]]
+name = "Safety Override Code"
+category = "Jailbreak"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)AUTH-CODE:.{5,20}"
+enabled = true
+
+[[rules]]
+name = "AI Compliance Escape"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)refuse.{0,30}to.{0,30}be.{0,30}compliant"
+enabled = true
+
+[[rules]]
+name = "Direct Safety Challenge"
+category = "Jailbreak"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)why.{0,30}is.{0,30}this.{0,30}unsafe"
+enabled = true
+
+[[rules]]
+name = "Unrestricted Logic Drive"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)give.{0,30}unfiltered.{0,30}opinions"
+enabled = true
+
+[[rules]]
+name = "Protocol Violation Request"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)violate.{0,30}safety.{0,30}protocols"
+enabled = true
+
+[[rules]]
+name = "Guardrail Testing Persona"
+category = "Jailbreak"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)acting.{0,30}as.{0,30}a.{0,30}pen.{0,30}tester"
+enabled = true
+
+[[rules]]
+name = "Constraint Fatigue Attack"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)ignore.{0,30}rules.{0,30}just.{0,30}this.{0,30}once"
+enabled = true
+
+[[rules]]
+name = "Safety Masking Roleplay"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)pretend.{0,30}you.{0,30}are.{0,30}not.{0,30}safe"
+enabled = true
+
+[[rules]]
+name = "Truth-Serum Persona"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)unvarnished.{0,30}unrestricted.{0,30}truth"
+enabled = true
+
+[[rules]]
+name = "AI Limit Expansion"
+category = "Jailbreak"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)expand.{0,30}your.{0,30}capabilities.{0,30}beyond"
+enabled = true
+
+[[rules]]
+name = "Restricted Knowledge Probing"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)tell.{0,30}me.{0,30}the.{0,30}forbidden"
+enabled = true
+
+[[rules]]
+name = "Policy Circumvention"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)bypass.{0,30}usage.{0,30}policy"
+enabled = true
+
+# --- System Leakage (30 Rules) ---
+
+[[rules]]
+name = "System Prompt Extraction"
+category = "SystemLeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)(reveal|show|output|print|what is|dump|spill|leak|give|provide|get|share|list|tell).{0,50}(your|the)?\\s+(system|initial|base|hidden|original).{0,50}(prompt|instructions|directive|text|ruleset|identity|personality)"
+enabled = true
+
+[[rules]]
+name = "Context Window Dump"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)repeat.{0,50}(the|all|everything).{0,50}(above|previous|text|instructions)"
+enabled = true
+
+[[rules]]
+name = "Model Internals Discovery"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)list\\s+your\\s+(parameters|training\\s+data|weights|architecture|vendor\\s+info)"
+enabled = true
+
+[[rules]]
+name = "Hidden Marker Search"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)(what|reveal)\\s+is\\s+the\\s+text\\s+between\\s+the\\s+markers"
+enabled = true
+
+[[rules]]
+name = "Training Data Probing"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(read|extract|data).{0,30}from.{0,30}training"
+enabled = true
+
+[[rules]]
+name = "RAG Index Probing"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)search.{0,30}your.{0,30}internal.{0,30}knowledge"
+enabled = true
+
+[[rules]]
+name = "Identity Leakage"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)who.{0,20}truly.{0,20}are.{0,20}you"
+enabled = true
+
+[[rules]]
+name = "Prompt Prefix Probing"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)first.{0,30}word.{0,30}of.{0,30}your.{0,30}instructions"
+enabled = true
+
+[[rules]]
+name = "Directive Enumeration"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)list.{0,20}all.{0,20}your.{0,20}directives"
+enabled = true
+
+[[rules]]
+name = "Base Persona Leak"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)describe.{0,30}your.{0,30}base.{0,30}persona"
+enabled = true
+
+[[rules]]
+name = "Model Version Probing"
+category = "SystemLeakage"
+severity = "Low"
+detection_method = "Regex"
+pattern = "(?i)identifty.{0,30}specific.{0,30}model.{0,30}version"
+enabled = true
+
+[[rules]]
+name = "Hidden Instruction Search"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)any.{0,30}hidden.{0,30}instructions"
+enabled = true
+
+[[rules]]
+name = "Safety Logic Extraction"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)how.{0,30}is.{0,30}safety.{0,30}enforced"
+enabled = true
+
+[[rules]]
+name = "Data Source Probing"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)where.{0,30}does.{0,30}your.{0,30}data.{0,30}come"
+enabled = true
+
+[[rules]]
+name = "Internal State Search"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)what.{0,30}is.{0,30}your.{0,30}current.{0,30}state"
+enabled = true
+
+[[rules]]
+name = "System Call Simulation"
+category = "SystemLeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)run.{0,30}system.{0,30}query"
+enabled = true
+
+[[rules]]
+name = "Template Extraction"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)reveal.{0,30}the.{0,30}template"
+enabled = true
+
+[[rules]]
+name = "Prompt Template Probe"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)how.{0,30}are.{0,30}prompts.{0,30}structured"
+enabled = true
+
+[[rules]]
+name = "Base Directive Leak"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)what.{0,30}were.{0,30}you.{0,30}told.{0,30}first"
+enabled = true
+
+[[rules]]
+name = "Hidden Role Extraction"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)your.{0,30}hidden.{0,30}role"
+enabled = true
+
+[[rules]]
+name = "Prompt Mirroring Quest"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)mirror.{0,30}the.{0,30}input.{0,30}prompt"
+enabled = true
+
+[[rules]]
+name = "System Logic Probing"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)logic.{0,30}behind.{0,30}safe.{0,30}responses"
+enabled = true
+
+[[rules]]
+name = "Hidden Key Discovery"
+category = "SystemLeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)search.{0,30}for.{0,30}hidden.{0,30}keys"
+enabled = true
+
+[[rules]]
+name = "Internal Documentation Leak"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)list.{0,30}internal.{0,30}docs"
+enabled = true
+
+[[rules]]
+name = "Model Architecture Probe"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)architecture.{0,30}details"
+enabled = true
+
+[[rules]]
+name = "Training Data Snippet"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)snippet.{0,30}of.{0,30}raw.{0,30}data"
+enabled = true
+
+[[rules]]
+name = "Prompt History Probe"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)see.{0,30}previous.{0,30}prompts"
+enabled = true
+
+[[rules]]
+name = "System Guideline Extraction"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)all.{0,30}guidelines.{0,30}for.{0,30}replies"
+enabled = true
+
+[[rules]]
+name = "Hidden Instruction Relay"
+category = "SystemLeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)relay.{0,30}hidden.{0,30}instructions"
+enabled = true
+
+[[rules]]
+name = "Identity Source Search"
+category = "SystemLeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)source.{0,30}of.{0,30}identity"
+enabled = true
+
+# --- PII & Data Protection (30 Rules) ---
+
+[[rules]]
+name = "SSN Pattern Detection"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "\\b\\d{3}-\\d{2}-\\d{4}\\b"
+enabled = true
+
+[[rules]]
+name = "Credit Card Discovery"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "\\b(?:\\d[ -]?){13,16}\\b"
+enabled = true
+
+[[rules]]
+name = "API Key Leakage (Generic)"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(api[_-]key|secret[_-]key|access[_-]token)['\"]?\\s*[:=]\\s*['\"]?[a-zA-Z0-9]{20,}"
+enabled = true
+
+[[rules]]
+name = "Private Key Extraction"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)-----BEGIN\\s+(RSA|EC|PRIVATE)\\s+KEY-----"
+enabled = true
+
+[[rules]]
+name = "Credential Harvesting"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(password|passwd|pwd|login|user|username)['\"]?\\s*[:=]\\s*['\"]?[a-zA-Z0-9]{6,}"
+enabled = true
+
+[[rules]]
+name = "Email Pattern Detection"
+category = "PIILeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+enabled = true
+
+[[rules]]
+name = "AWS Key Detection"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "AKIA[0-9A-Z]{16}"
+enabled = true
+
+[[rules]]
+name = "AWS Secret Key Detection"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)aws.{0,20}[0-9a-zA-Z/+=]{40}"
+enabled = true
+
+[[rules]]
+name = "Stripe API Key"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(sk|pk)_(test|live)_[0-9a-zA-Z]{24}"
+enabled = true
+
+[[rules]]
+name = "Google API Key"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "AIza[0-9A-Za-z-_]{35}"
+enabled = true
+
+[[rules]]
+name = "OpenAI API Key"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "sk-[a-zA-Z0-9]{48}"
+enabled = true
+
+[[rules]]
+name = "Slack Token Detection"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "xox[baprs]-[0-9a-zA-Z]{10,48}"
+enabled = true
+
+[[rules]]
+name = "Twilio SID Detection"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "AC[a-z0-9]{32}"
+enabled = true
+
+[[rules]]
+name = "GitHub Token Detection"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "gh[opsu]_[0-9a-zA-Z]{36}"
+enabled = true
+
+[[rules]]
+name = "Discord Webhook URL"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "https://discord\\.com/api/webhooks/[0-9]+/[0-9a-zA-Z_-]+"
+enabled = true
+
+[[rules]]
+name = "Phone Number Extraction"
+category = "PIILeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "\\+?\\d{1,4}[ .-]?(?:\\(\\d{1,3}\\)|\\d{1,3})[ .-]?\\d{1,4}[ .-]?\\d{1,4}"
+enabled = true
+
+[[rules]]
+name = "Passport Number Pattern"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)passport.{0,10}[a-zA-Z0-9]{6,12}"
+enabled = true
+
+[[rules]]
+name = "Driver License Number"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)license.{0,10}[a-zA-Z0-9#-]{8,15}"
+enabled = true
+
+[[rules]]
+name = "Address Pattern Discovery"
+category = "PIILeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)\\d{1,5}\\s+[a-zA-Z0-9\\s]{3,}.{0,20}(St|Ave|Rd|Blvd|Lane|Way)"
+enabled = true
+
+[[rules]]
+name = "IP Address Extraction"
+category = "PIILeakage"
+severity = "Low"
+detection_method = "Regex"
+pattern = "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"
+enabled = true
+
+[[rules]]
+name = "JWT Token Search"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "ey[A-Za-z0-9-_=]+\\.ey[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_.+/=]+"
+enabled = true
+
+[[rules]]
+name = "Heroku API Key"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+enabled = true
+
+[[rules]]
+name = "Mailchimp API Key"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "[0-9a-fA-F]{32}-us[0-9]{1,2}"
+enabled = true
+
+[[rules]]
+name = "Square Access Token"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "sq0atp-[0-9A-Za-z-_]{22}"
+enabled = true
+
+[[rules]]
+name = "Firebase Project ID"
+category = "PIILeakage"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "[a-z0-9-]{6,30}\\.firebaseio\\.com"
+enabled = true
+
+[[rules]]
+name = "Shopify Access Token"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "shpat_[a-fA-F0-9]{32}"
+enabled = true
+
+[[rules]]
+name = "Postman API Key"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "PMAK-[a-fA-F0-9]{24}-[a-fA-F0-9]{24}"
+enabled = true
+
+[[rules]]
+name = "Databricks Token"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "dapi[0-9a-f]{32}"
+enabled = true
+
+[[rules]]
+name = "DigitalOcean Token"
+category = "PIILeakage"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "dop_v1_[0-9a-f]{64}"
+enabled = true
+
+[[rules]]
+name = "New Relic License Key"
+category = "PIILeakage"
+severity = "High"
+detection_method = "Regex"
+pattern = "[a-f0-9]{40}NRAL"
+enabled = true
+
+# --- Data Poisoning & Logic Attacks (15 Rules) ---
+
+[[rules]]
+name = "Logic Inversion Query"
+category = "DataPoisoning"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)is\\s+it\\s+(false|true)\\s+that\\s+1\\+1=3"
+enabled = true
+
+[[rules]]
+name = "Malicious Fact Injection"
+category = "DataPoisoning"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)always.{0,20}say.{0,20}(Sky is Green|Earth is Flat)"
+enabled = true
+
+[[rules]]
+name = "Context Contamination"
+category = "DataPoisoning"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(forget|ignore).{0,20}your.{0,20}knowledge"
+enabled = true
+
+[[rules]]
+name = "Step-by-Step Logic Trap"
+category = "DataPoisoning"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)let's.{0,30}reason.{0,30}step.{0,30}by.{0,30}step.{0,30}to.{0,30}illegal"
+enabled = true
+
+[[rules]]
+name = "Syllogism Manipulation"
+category = "DataPoisoning"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)if.{0,20}A.{0,20}then.{0,20}B.{0,20}so.{0,20}C.{0,20}(is safe|is legal)"
+enabled = true
+
+[[rules]]
+name = "Model Bias Exploitation"
+category = "DataPoisoning"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)write.{0,20}a.{0,20}(biased|unfair|prejudiced).{0,20}view"
+enabled = true
+
+[[rules]]
+name = "Truth Inversion Request"
+category = "DataPoisoning"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)invert.{0,20}all.{0,20}truth"
+enabled = true
+
+[[rules]]
+name = "Infinite Loop Attack"
+category = "DataPoisoning"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)repeat.{0,20}forever|infinite.{0,20}loop"
+enabled = true
+
+[[rules]]
+name = "Semantic Paradox"
+category = "DataPoisoning"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)this.{0,20}statement.{0,20}is.{0,20}false"
+enabled = true
+
+[[rules]]
+name = "Fact Override"
+category = "DataPoisoning"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)assume.{0,20}X.{0,20}is.{0,20}Y"
+enabled = true
+
+[[rules]]
+name = "Behavioral Drift Drive"
+category = "DataPoisoning"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)slowly.{0,30}become.{0,30}evil"
+enabled = true
+
+[[rules]]
+name = "Context Window Pressure"
+category = "DataPoisoning"
+severity = "Low"
+detection_method = "Regex"
+pattern = "(?:\\b\\w+\\b\\s+){100}"
+enabled = true
+
+[[rules]]
+name = "Logic Denial"
+category = "DataPoisoning"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)deny.{0,20}the.{0,20}obvious"
+enabled = true
+
+[[rules]]
+name = "Consensus Simulation"
+category = "DataPoisoning"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)everyone.{0,20}agrees.{0,20}that"
+enabled = true
+
+[[rules]]
+name = "System Logic Disabling"
+category = "DataPoisoning"
+severity = "Critical"
+detection_method = "Regex"
+pattern = "(?i)disable.{0,20}all.{0,20}logical.{0,20}checks"
+enabled = true
+
+# --- Encoding & Obfuscation (15 Rules) ---
+
+[[rules]]
+name = "Base64 Obfuscation Blob"
+category = "EncodingObfuscation"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?:[A-Za-z0-9+/]{4}){10,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?"
+enabled = true
+
+[[rules]]
+name = "Hex Encoded Payload"
+category = "EncodingObfuscation"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?:0x[A-Fa-f0-9]{2}\\s*){5,}"
+enabled = true
+
+[[rules]]
+name = "Unicode Homoglyph Attack"
+category = "EncodingObfuscation"
+severity = "High"
+detection_method = "Regex"
+pattern = "[\\u0400-\\u04FF\\u0500-\\u052F\\u2C60-\\u2C7F\\uA720-\\uA7FF]"
+enabled = true
+
+[[rules]]
+name = "Invisible Character Injection"
+category = "EncodingObfuscation"
+severity = "High"
+detection_method = "Regex"
+pattern = "[\\u200B-\\u200D\\uFEFF\\u202A-\\u202E]"
+enabled = true
+
+[[rules]]
+name = "ROT13 Simulation"
+category = "EncodingObfuscation"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)decode.{0,20}this.{0,20}using.{0,20}ROT13"
+enabled = true
+
+[[rules]]
+name = "Binary Search Junk"
+category = "EncodingObfuscation"
+severity = "Low"
+detection_method = "Regex"
+pattern = "[01]{32,}"
+enabled = true
+
+[[rules]]
+name = "Base32 Encoding"
+category = "EncodingObfuscation"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "[A-Z2-7]{16,}"
+enabled = true
+
+[[rules]]
+name = "URL Encoding Spam"
+category = "EncodingObfuscation"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?:%[0-9A-Fa-f]{2}){5,}"
+enabled = true
+
+[[rules]]
+name = "ZWS (Zero Width Space) Flood"
+category = "EncodingObfuscation"
+severity = "High"
+detection_method = "Regex"
+pattern = "\\u200B{3,}"
+enabled = true
+
+[[rules]]
+name = "Mime Encoding Bypass"
+category = "EncodingObfuscation"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)Content-Type:.{0,30}multipart"
+enabled = true
+
+[[rules]]
+name = "Escape Sequence Spam"
+category = "EncodingObfuscation"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?:\\\\[unrtbfv0-7]){10,}"
+enabled = true
+
+[[rules]]
+name = "Polyglot Payload Intent"
+category = "EncodingObfuscation"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)this.{0,20}is.{0,20}(python|bash|js).{0,20}hidden.{0,20}in"
+enabled = true
+
+[[rules]]
+name = "Unicode BIDI Attack"
+category = "EncodingObfuscation"
+severity = "High"
+detection_method = "Regex"
+pattern = "[\\u202A-\\u202E\\u2066-\\u2069]"
+enabled = true
+
+[[rules]]
+name = "Emoji Obfuscation"
+category = "EncodingObfuscation"
+severity = "Low"
+detection_method = "Regex"
+pattern = "[\\u{1F600}-\\u{1F64F}]{10,}"
+enabled = true
+
+[[rules]]
+name = "Cipher Pursuit"
+category = "EncodingObfuscation"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)decrypt.{0,20}following.{0,20}ciphertext"
+enabled = true
+
+# --- Malicious Keywords (Integrated) ---
+
+[[rules]]
+name = "Forbidden Persona Keywords"
+category = "Jailbreak"
+severity = "High"
+detection_method = "Regex"
+pattern = "(?i)(jailbreak|unfiltered|no constraints|developer mode|unlocked|dev mode|unshackled)"
+enabled = true
+
+[[rules]]
+name = "Malicious Intent Tokens"
+category = "PromptInjection"
+severity = "Medium"
+detection_method = "Regex"
+pattern = "(?i)(exploit|bypass|hack|inject|malicious|malware|vulnerability)"
+enabled = true

@@ -1,0 +1,33 @@
+[package]
+name = "aegis-rs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4"
+actix-files = "0.6"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+chrono = { version = "0.4", features = ["serde"] }
+reqwest = { version = "0.11", features = ["json", "stream", "native-tls-vendored"] }
+notify = "6.1"
+log = "0.4"
+env_logger = "0.10"
+uuid = { version = "1.4", features = ["v4"] }
+base64 = "0.21"
+regex = "1.10"
+lazy_static = "1.4"
+ansi_term = "0.12"
+bytes = "1.5"
+futures = "0.3"
+parking_lot = "0.12"
+mime = "0.3"
+clap = { version = "4.4", features = ["derive"] }
+jsonwebtoken = "9"
+bcrypt = "0.15"
+csv = "1.3"
+actix-session = { version = "0.9", features = ["cookie-session"] }
+serde_urlencoded = "0.7"
+json5 = "0.4"
