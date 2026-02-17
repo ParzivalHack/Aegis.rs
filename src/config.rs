@@ -8,7 +8,8 @@ pub struct Config {
     pub proxy: ProxyConfig,
     pub detection: DetectionConfig,
     pub ai_judge: AIJudgeConfig,
-    pub cloudflare_tunnel: CloudflareTunnelConfig,
+    #[serde(alias = "cloudflare_tunnel")]
+    pub serveo_tunnel: ServeoTunnelConfig,
     pub logging: LoggingConfig,
     pub rules: RulesConfig,
     pub performance: PerformanceConfig,
@@ -66,10 +67,11 @@ pub struct AIJudgeConfig {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct CloudflareTunnelConfig {
+pub struct ServeoTunnelConfig {
     pub enabled: bool,
     pub token: String,
-    pub cloudflared_path: String,
+    #[serde(alias = "cloudflared_path")]
+    pub ssh_path: String,
     pub local_url: String,
 }
 

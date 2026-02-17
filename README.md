@@ -22,7 +22,7 @@ Aegis.rs is a **transparent reverse proxy** that intercepts every request destin
 - [Dashboard](#dashboard)
 - [Testing the Proxy](#testing-the-proxy)
 - [Log Format](#log-format)
-- [Cloudflare Tunnel](#cloudflare-tunnel)
+- [Serveo Tunnel](#serveo-tunnel)
 - [Performance](#performance)
 - [Security Notes](#security-notes)
 - [Contributing](#contributing)
@@ -297,7 +297,7 @@ The dashboard at `http://localhost:3000` has five pages:
 - **Analysis** — attack vector donut chart, hourly safe vs. threat bar chart.
 - **Threat Intelligence** — full searchable log table. Click any row for a forensic detail modal with payload, matched rules, confidence, and a one-click JSON copy. Export as JSON or CSV.
 - **Ruleset** — create, edit, or delete rules live. Changes persist to `rules.toml` immediately.
-- **Settings** — edit target URL, AI Judge key, detection toggles, and Cloudflare Tunnel without touching `config.toml` by hand.
+- **Settings** — edit target URL, AI Judge key, detection toggles, and Serveo Tunnel without touching `config.toml` by hand.
 
 **Authentication:** bcrypt-hashed password + signed cookie sessions. Change both `admin_password_hash` and `session_secret` before exposing the dashboard to any network.
 
@@ -356,16 +356,20 @@ Every request generates one JSON line in `aegis.log`:
 }
 ```
 
-## Cloudflare Tunnel
+## Serveo Tunnel
 
-Exposes the **dashboard** (port 3000) over a public secure HTTPS URL, no port forwarding or public IP required. The proxy (port 8080) stays local-only. In the `config.toml`, you can leave `token` empty, as Aegis.rs uses as a fallback `cloudflared tunnel --url`, and so a random secure `*.trycloudflare.com` tunnel appears anyways, in the Settings page of the Web Dashboard.
+Exposes the **dashboard** (port 3000) over a public HTTPS URL without port forwarding. The proxy (port 8080) stays local-only.  
+Under the hood Aegis.rs uses SSH reverse tunneling to Serveo (`ssh -R ... serveo.net`) and captures the assigned public URL shown in the Settings page of the dashboard.
 
 ```
-[cloudflare_tunnel]
+[serveo_tunnel]
 enabled = true
-token = ""
+token = ""           # Optional preferred subdomain (requires registered SSH key on Serveo)
+ssh_path = "ssh"     # Path to ssh binary
 local_url = "http://127.0.0.1:3000"
 ```
+
+When no custom subdomain is available, Serveo assigns a random URL, typically on `*.serveousercontent.com`.
 
 ## Performance
 

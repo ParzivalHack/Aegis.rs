@@ -59,14 +59,14 @@ async fn main() -> std::io::Result<()> {
     // Initialize metrics
     let metrics = Arc::new(metrics::Metrics::new());
 
-    // Initialize Cloudflare Tunnel if configured
+    // Initialize Serveo tunnel if configured
     let tunnel_manager = {
         let cfg = config.read();
-        Arc::new(TunnelManager::new(&cfg.cloudflare_tunnel))
+        Arc::new(TunnelManager::new(&cfg.serveo_tunnel))
     };
     
-    if config.read().cloudflare_tunnel.enabled {
-        tunnel_manager.start().expect("Failed to start Cloudflare Tunnel");
+    if config.read().serveo_tunnel.enabled {
+        tunnel_manager.start().expect("Failed to start Serveo tunnel");
     }
 
     // Create HTTP client for proxy

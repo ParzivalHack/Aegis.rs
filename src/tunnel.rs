@@ -1,4 +1,4 @@
-use crate::config::CloudflareTunnelConfig;
+use crate::config::ServeoTunnelConfig;
 use crate::errors::AegisError;
 use std::process::{Child, Command, Stdio};
 use std::sync::{Arc, Mutex};
@@ -7,13 +7,13 @@ use std::thread;
 use std::time::Duration;
 
 pub struct TunnelManager {
-    config: CloudflareTunnelConfig,
+    config: ServeoTunnelConfig,
     process: Arc<Mutex<Option<Child>>>,
     public_url: Arc<Mutex<Option<String>>>,
 }
 
 impl TunnelManager {
-    pub fn new(config: &CloudflareTunnelConfig) -> Self {
+    pub fn new(config: &ServeoTunnelConfig) -> Self {
         Self {
             config: config.clone(),
             process: Arc::new(Mutex::new(None)),
@@ -27,19 +27,19 @@ impl TunnelManager {
             return Ok(());
         }
 
-        // Keep backward compatibility with old config field name.
-        // If `cloudflared_path` is empty or still set to "cloudflared", use system ssh.
-        let ssh_path = if self.config.cloudflared_path.trim().is_empty()
-            || self.config.cloudflared_path.trim().eq_ignore_ascii_case("cloudflared")
+        // Keep backward compatibility with old default values.
+        // If `ssh_path` is empty or still set to "cloudflared", use system ssh.
+        let ssh_path = if self.config.ssh_path.trim().is_empty()
+            || self.config.ssh_path.trim().eq_ignore_ascii_case("cloudflared")
         {
             "ssh".to_string()
         } else {
-            self.config.cloudflared_path.clone()
+            self.config.ssh_path.clone()
         };
 
         if std::process::Command::new(&ssh_path).arg("-V").output().is_err() {
             return Err(AegisError::TunnelError(format!(
-                "ssh binary not found at '{}'. Install OpenSSH client or configure [cloudflare_tunnel].cloudflared_path with your ssh path.",
+                "ssh binary not found at '{}'. Install OpenSSH client or configure [serveo_tunnel].ssh_path with your ssh path.",
                 ssh_path
             )));
         }

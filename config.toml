@@ -42,10 +42,10 @@ max_tokens = 256
 temperature = 0.10000000149011612
 timeout_ms = 10000
 
-[cloudflare_tunnel]
+[serveo_tunnel]
 enabled = false
 token = ""
-cloudflared_path = "ssh"
+ssh_path = "ssh"
 local_url = "http://127.0.0.1:3000"
 
 [logging]
