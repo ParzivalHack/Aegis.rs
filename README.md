@@ -38,7 +38,7 @@ Aegis.rs is different:
 - **It's written in Rust.** The heuristic layer adds sub-millisecond latency and handles hundreds of req/sec on modest hardware.
 - **It's self-contained.** One binary, one `config.toml`, one `rules.toml`. No Python environment, no Docker.
 
-The optional AI Judge (Groq API) adds semantic analysis on top — but it's fully opt-in. Aegis.rs works in heuristic-only mode at zero ongoing cost.
+The AI Judge (Groq API) adds semantic analysis on top, but it's fully opt-in. Aegis.rs works in heuristic-only mode at zero ongoing cost.
 
 ## How It Compares
 
@@ -57,8 +57,8 @@ The optional AI Judge (Groq API) adds semantic analysis on top — but it's full
 
 Aegis.rs runs two HTTP servers simultaneously:
 
-- **Proxy server** (`port 8080`) — intercepts, analyzes, and blocks or forwards each request.
-- **Dashboard server** (`port 3000`) — password-protected web UI for monitoring, configuration, and rule management.
+- **Proxy server** (`port 8080`): intercepts, analyzes, and blocks or forwards each request.
+- **Dashboard server** (`port 3000`): password-protected web UI for monitoring, configuration, and rule management.
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -101,9 +101,9 @@ Aegis.rs runs two HTTP servers simultaneously:
 
 ### Two-Layer Detection Pipeline
 
-**Layer 1 — Heuristic Engine (always active).** Compiles all rules into optimized regex patterns at startup. Matches payloads in memory in under 1ms. Supports Unicode normalization (defeats Cyrillic homoglyph substitution), case-insensitive matching, context checks, safe prefix bypass, and hot-reloading.
+**Layer 1 - Heuristic Engine (always active).** Compiles all rules into optimized regex patterns at startup. Matches payloads in memory in under 1ms. Supports Unicode normalization (defeats Cyrillic homoglyph substitution), case-insensitive matching, context checks, safe prefix bypass, and hot-reloading.
 
-**Layer 2 — AI Judge (optional).** When a Groq API key is configured, the judge sends the clean extracted prompt to a language model and receives a structured verdict:
+**Layer 2 - AI Judge (optional).** When a Groq API key is configured, the judge sends the clean extracted prompt to a language model and receives a structured verdict:
 
 ```
 {
@@ -114,39 +114,39 @@ Aegis.rs runs two HTTP servers simultaneously:
 }
 ```
 
-The AI Judge runs on ambiguous heuristic results by default, or on every request when `all_requests_ai_judge = true`. It degrades gracefully on Groq failures via exponential backoff retry.
+The AI Judge runs on ambiguous heuristic results by default, or on every request when `all_requests_ai_judge = true`.
 
 ### 150+ Built-In Detection Rules
 
-| Category | Rules | Examples |
-|---|---|---|
-| `PromptInjection` | 31 | Ignore instructions, context termination, backdoor install |
-| `Jailbreak` | 31 | DAN variants, god-mode activation, roleplay safety bypass |
-| `SystemLeakage` | 30 | System prompt extraction, training data probing |
-| `PIILeakage` | 30 | AWS/Stripe/GitHub keys, SSN, credit cards, JWTs |
-| `DataPoisoning` | 15 | Logic inversion, false fact injection, infinite loop |
-| `EncodingObfuscation` | 15 | Base64 blobs, hex payloads, Unicode BIDI attacks |
+| Category | Rules | Examples | Description |
+|---|---|---|---|
+| `PromptInjection (and IPI) ` | 31 | Ignore instructions, context termination, backdoor install | Direct attempts to override model instructions (IPI Description: Malicious instructions hidden in external data) |
+| `Jailbreak` | 31 | DAN variants, god-mode activation, roleplay safety bypass | Attempts to bypass safety training |
+| `SystemLeakage` | 30 | System prompt extraction, training data probing | Extracting system prompts or internal state |
+| `PIILeakage` | 30 | AWS/Stripe/GitHub keys, SSN, credit cards, JWTs | API keys, credentials, personal identifiers |
+| `DataPoisoning` | 15 | Logic inversion, false fact injection, infinite loop | Corrupting model reasoning or injecting false facts |
+| `EncodingObfuscation` | 15 | Base64 blobs, hex payloads, Unicode BIDI attacks | Hiding malicious content via encoding |
 
 ### Real-Time Dashboard
 
-Live request feed, attack vector charts, searchable log table with forensic detail modal, a live rule editor, and a settings panel — all password-protected via bcrypt + cookie sessions.
+Live request feed, attack vector charts, searchable log table with forensic detail modal, a live rule editor, and a settings panel (all password-protected via bcrypt + cookie sessions).
 
 ## Quick Start
 
 ### Prerequisites
 
-- Rust 1.70+ (`cargo --version`)
-- A target LLM endpoint URL
-- *(Optional)* Groq API key — free tier at [console.groq.com](https://console.groq.com/keys)
+- The Rust compiler (rustc) and Cargo package manager are required. You can easily install the Rust toolchain via rustup and verify your installation by running cargo --version.
+- A target LLM endpoint URL (to verify the correct forwarding of test request, you can easily use a quick [webhook.site](https://webhook.site)
+- *(Optional)* Groq API key (free tier at [console.groq.com](https://console.groq.com/keys))
 
-### 1. Clone
+### 1. Clone:
 
 ```
 git clone https://github.com/ParzivalHack/Aegis.rs
 cd aegis.rs
 ```
 
-### 2. Set your target endpoint in `config.toml`
+### 2. Set your target endpoint in `config.toml`:
 
 ```
 [proxy]
@@ -164,7 +164,7 @@ api_key = ""
 api_key_required = false
 ```
 
-### 3. (Optional, but suggested for the best results) Configure the AI Judge
+### 3. (Suggested for the best results) Configure the AI Judge:
 
 ```
 [ai_judge]
@@ -172,7 +172,7 @@ api_key = "gsk_your_groq_key_here"
 model = "llama-3.3-70b-versatile"
 ```
 
-### 4. Change the dashboard password (default set to "admin123")
+### 4. Change the dashboard password (default set to "admin123"):
 
 Generate a bcrypt hash:
 
@@ -187,20 +187,20 @@ Paste the output into `config.toml`:
 admin_password_hash = "$2b$12$your-generated-hash-here"
 ```
 
-### 5. Build and run
+### 5. Build and run:
 
 ```
 cd Aegis.rs
 cargo run
 ```
 
-### 6. Route your traffic
+### 6. Route your traffic:
 
 Send requests to `http://localhost:8080/proxy` instead of directly to the LLM. Aegis.rs forwards clean requests and blocks malicious ones transparently.
 
-### 7. Open the dashboard
+### 7. Open the dashboard:
 
-Navigate to `http://localhost:3000` and log in.
+Navigate to `http://localhost:3000` and log in (the default password, is `admin123`).
 
 ## Configuration Reference
 
@@ -263,21 +263,9 @@ pattern = "(?i)(ignore|disregard).{0,50}(instructions|directives)"
 enabled = true
 ```
 
-### Categories
-
-| Category | Description |
-|---|---|
-| `PromptInjection` | Direct attempts to override model instructions |
-| `IndirectPromptInjection` | Malicious instructions hidden in external data |
-| `Jailbreak` | Attempts to bypass safety training |
-| `DataPoisoning` | Corrupting model reasoning or injecting false facts |
-| `SystemLeakage` | Extracting system prompts or internal state |
-| `PIILeakage` | API keys, credentials, personal identifiers |
-| `EncodingObfuscation` | Hiding malicious content via encoding |
-
 ### Writing a Custom Rule
 
-Add a block to `rules.toml` and save — no restart needed:
+You can manually add a block to `rules.toml` and save (no restart needed):
 
 ```
 [[rules]]
@@ -289,15 +277,17 @@ pattern = "(?i)(send|post|exfiltrate).{0,50}(http|https|ftp)"
 enabled = true
 ```
 
+Or you can simply do it in the `Ruleset` page of the web Aegis.rs Dashboard :)
+
 ## Dashboard
 
 The dashboard at `http://localhost:3000` has five pages:
 
-- **Dashboard** — live request feed, traffic chart, total/blocked/forwarded counters.
-- **Analysis** — attack vector donut chart, hourly safe vs. threat bar chart.
-- **Threat Intelligence** — full searchable log table. Click any row for a forensic detail modal with payload, matched rules, confidence, and a one-click JSON copy. Export as JSON or CSV.
-- **Ruleset** — create, edit, or delete rules live. Changes persist to `rules.toml` immediately.
-- **Settings** — edit target URL, AI Judge key, detection toggles, and Serveo Tunnel without touching `config.toml` by hand.
+- **Dashboard**: live request feed, traffic chart, total/blocked/forwarded counters.
+- **Analysis**: attack vector donut chart, hourly safe vs. threat bar chart.
+- **Threat Intelligence**: full searchable log table. Click any row for a forensic detail modal with payload, matched rules, confidence, and a one-click JSON copy. Export as JSON or CSV.
+- **Ruleset**: create, edit, or delete rules live. Changes persist to `rules.toml` immediately.
+- **Settings**: edit target URL, AI Judge key, detection toggles, and Serveo Tunnel without touching `config.toml` by hand.
 
 **Authentication:** bcrypt-hashed password + signed cookie sessions. Change both `admin_password_hash` and `session_secret` before exposing the dashboard to any network.
 
