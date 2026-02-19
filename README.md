@@ -8,7 +8,7 @@
 [![Build](https://img.shields.io/badge/build-stable--0.1.0-blue)](https://github.com/ParzivalHack/aegis-rs)
 [![Actix-web](https://img.shields.io/badge/Powered%20by-Actix--web-blue)](https://actix.rs/)
 
-Aegis.rs is a **transparent reverse proxy** that intercepts every request destined for an LLM endpoint and runs it through a two-layer security pipeline before deciding whether to forward or block it. It ships as a single binary, needs no external runtime, and exposes a live monitoring dashboard.
+Aegis.rs is a **transparent reverse proxy** that intercepts every request destined for an LLM endpoint and runs it through a two-layer security pipeline before deciding whether to forward or block it. It ships as a single binary, needs no external runtime, and exposes a live monitoring dashboard, with sub-milliseconds requests' latency (thanks to Actix-web).
 
 ## Table of Contents
 
@@ -29,13 +29,13 @@ Aegis.rs is a **transparent reverse proxy** that intercepts every request destin
 
 ## Why Aegis.rs?
 
-Tools like [LLM Guard](https://github.com/protectai/llm-guard), [Lakera Guard](https://www.lakera.ai/), and [NeMo Guardrails](https://github.com/NVIDIA/NeMo-Guardrails) are either Python libraries you must integrate into your application code, or cloud SaaS products that route your traffic through a third party.
+Tools like [LLM Guard](https://github.com/protectai/llm-guard), [Lakera Guard](https://www.lakera.ai/), and [NeMo Guardrails](https://github.com/NVIDIA/NeMo-Guardrails) are either Python libraries you must integrate into your application code manually, or whole cloud SaaS products that route your traffic through a third party (which you have no control over).
 
 Aegis.rs is different:
 
 - **It's a proxy, not a library.** Zero code changes. Point your requests at `localhost:8080` instead of the LLM endpoint and Aegis.rs does the rest.
 - **It runs locally.** Your prompts never leave your machine for inspection. No telemetry, no SaaS middleman.
-- **It's written in Rust.** The heuristic layer adds sub-millisecond latency and handles hundreds of req/sec on modest hardware.
+- **It's written in Rust.** The heuristic layer adds sub-millisecond latency and handles (as of now) a few hundreds of req/sec on modest hardware.
 - **It's self-contained.** One binary, one `config.toml`, one `rules.toml`. No Python environment, no Docker.
 
 The AI Judge (Groq API) adds semantic analysis on top, but it's fully opt-in. Aegis.rs works in heuristic-only mode at zero ongoing cost.
